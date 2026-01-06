@@ -1,0 +1,29 @@
+{
+  "session_id": "960a55e4261a407aa5875812a2ba00eb",
+  "session_start": "2026-01-05T17:18:40.460389+00:00",
+  "export_timestamp": "2026-01-05T17:18:40.460554+00:00",
+  "total_entries": 1,
+  "history": [
+    {
+      "success": true,
+      "content": "Mock generated content",
+      "template_used": "product_description",
+      "variables": {
+        "product_name": "Test",
+        "features": "Test",
+        "audience": "Test"
+      },
+      "timestamp": "2026-01-05T17:18:40.460451+00:00",
+      "request_id": "10197af24f6b458ca5cdbfbf721b216b",
+      "model": "gpt-3.5-turbo",
+      "tokens_used": {
+        "prompt": 50,
+        "completion": 50,
+        "total": 100
+      },
+      "cost": 0.001,
+      "cached": false,
+      "generation_time": 8.680000610183924e-05
+    }
+  ]
+}

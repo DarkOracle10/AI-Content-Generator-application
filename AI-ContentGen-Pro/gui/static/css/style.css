@@ -1,0 +1,522 @@
+/* ================================================
+   AI CONTENT GENERATOR - CUSTOM STYLES
+   Complements Tailwind CSS with animations, effects,
+   and browser-specific enhancements
+   ================================================ */
+
+/* ================================================
+   SMOOTH SCROLLING & BASE BEHAVIOR
+   ================================================ */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ================================================
+   CUSTOM SCROLLBAR STYLING
+   ================================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 5px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4f46e5;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #f1f5f9;
+}
+
+.dark * {
+    scrollbar-color: #6366f1 #1f2937;
+}
+
+/* ================================================
+   ACCESSIBILITY - FOCUS STYLES
+   ================================================ */
+*:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Remove default outline for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ================================================
+   ANIMATIONS
+   ================================================ */
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Slide in from right (for toasts) */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+}
+
+/* Spin animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Skeleton loading shimmer effect */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background-color: #e5e7eb;
+    background-image: linear-gradient(
+        90deg,
+        #e5e7eb 0px,
+        #f3f4f6 40px,
+        #e5e7eb 80px
+    );
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    animation: skeleton-loading 1.2s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.dark .skeleton {
+    background-color: #374151;
+    background-image: linear-gradient(
+        90deg,
+        #374151 0px,
+        #4b5563 40px,
+        #374151 80px
+    );
+}
+
+/* ================================================
+   GRADIENT TEXT EFFECT
+   ================================================ */
+.gradient-text {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Animated gradient text */
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-text-animated {
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #8b5cf6,
+        #ec4899,
+        #6366f1
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+}
+
+/* ================================================
+   HOVER EFFECTS
+   ================================================ */
+
+/* Card lift effect */
+.card-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.15);
+}
+
+.dark .card-lift:hover {
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.25);
+}
+
+/* Glow effect on hover */
+.glow-on-hover {
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-on-hover:hover {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Scale up on hover */
+.scale-on-hover {
+    transition: transform 0.2s ease;
+}
+
+.scale-on-hover:hover {
+    transform: scale(1.05);
+}
+
+/* ================================================
+   BUTTON EFFECTS
+   ================================================ */
+
+/* Ripple effect for buttons */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+}
+
+button:active::after {
+    width: 200px;
+    height: 200px;
+    opacity: 1;
+}
+
+/* Shimmer effect for primary buttons */
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.button-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ================================================
+   INPUT ENHANCEMENTS
+   ================================================ */
+
+/* Floating label effect */
+.floating-label {
+    position: relative;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+    transform: translateY(-1.5rem) scale(0.85);
+    color: #6366f1;
+}
+
+/* ================================================
+   LOADING STATES
+   ================================================ */
+
+/* Typing indicator dots */
+@keyframes typing-dots {
+    0%, 20% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.typing-dot {
+    animation: typing-dots 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Progress bar animation */
+@keyframes progress-bar {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.progress-bar-animated {
+    animation: progress-bar 1.5s ease-in-out infinite;
+}
+
+/* ================================================
+   PRINT STYLES
+   ================================================ */
+@media print {
+    /* Hide navigation and interactive elements */
+    nav,
+    #toastContainer,
+    #loadingOverlay,
+    #darkModeToggle,
+    button,
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Reset colors for print */
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    /* Style output for print */
+    #outputContent {
+        border: 2px solid #000;
+        padding: 20px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.6;
+        page-break-inside: avoid;
+    }
+    
+    /* Add page breaks */
+    .page-break {
+        page-break-after: always;
+    }
+    
+    /* Print URLs for links */
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        color: #666;
+    }
+    
+    /* Optimize for print */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+}
+
+/* ================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================ */
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    /* Disable complex animations on mobile for performance */
+    .fade-in,
+    .slide-in-right {
+        animation: none;
+    }
+    
+    /* Increase touch targets */
+    button,
+    a,
+    input,
+    select {
+        min-height: 44px;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+    /* Adjust spacing for tablets */
+    .container {
+        padding: 1.5rem;
+    }
+}
+
+/* ================================================
+   ACCESSIBILITY - REDUCED MOTION
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    /* Keep spinner visible but static */
+    .spinner {
+        animation: none;
+    }
+}
+
+/* ================================================
+   BROWSER-SPECIFIC FIXES
+   ================================================ */
+
+/* Safari-specific fixes */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+    .backdrop-blur {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* Firefox-specific textarea resize */
+@-moz-document url-prefix() {
+    textarea {
+        scrollbar-width: thin;
+    }
+}
+
+/* Edge-specific input styling */
+@supports (-ms-ime-align: auto) {
+    input[type="range"] {
+        -ms-appearance: none;
+    }
+}
+
+/* ================================================
+   UTILITY CLASSES
+   ================================================ */
+
+/* Text selection styling */
+::selection {
+    background-color: #6366f1;
+    color: white;
+}
+
+.dark ::selection {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* No select - prevent text selection */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+
+/* Glassmorphism effect */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Truncate text with ellipsis */
+.truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.truncate-3-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

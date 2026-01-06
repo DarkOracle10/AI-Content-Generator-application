@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generation History - AI Content Generator Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #eee;
+            --text-secondary: #adb5bd;
+        }
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: var(--bg-card) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+        }
+        .form-control, .form-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text-primary);
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255,255,255,0.08);
+            border-color: #667eea;
+            color: var(--text-primary);
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+        }
+        .btn-outline-secondary {
+            border-color: rgba(255,255,255,0.2);
+            color: var(--text-secondary);
+        }
+        .btn-outline-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text-primary);
+        }
+        .table {
+            color: var(--text-primary);
+        }
+        .table thead th {
+            border-color: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .table tbody td {
+            border-color: rgba(255,255,255,0.05);
+            vertical-align: middle;
+        }
+        .history-item {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .history-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        .badge-success { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .badge-error { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stats-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats-card .label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .content-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .nav-link {
+            color: var(--text-secondary);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+        .modal-content {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+        .modal-header {
+            border-color: rgba(255,255,255,0.1);
+        }
+        .modal-footer {
+            border-color: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
+                AI Content Generator Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/history"><i class="bi bi-clock-history me-1"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs"><i class="bi bi-book me-1"></i> API Docs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-clock-history me-2"></i>Generation History</h2>
+            <div>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary" onclick="exportHistory('json')">
+                        <i class="bi bi-download me-1"></i> Export JSON
+                    </button>
+                    <button class="btn btn-outline-secondary" onclick="exportHistory('csv')">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+                    </button>
+                </div>
+                <button class="btn btn-outline-danger ms-2" onclick="clearHistory()">
+                    <i class="bi bi-trash me-1"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card stats-card">
+                    <div class="value" id="totalGenerations">0</div>
+                    <div class="label">Total Generations</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stats-card">
+                    <div class="value" id="totalCost">$0.00</div>
+                    <div class="label">Total Cost</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stats-card">
+                    <div class="value" id="successRate">0%</div>
+                    <div class="label">Success Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card stats-card">
+                    <div class="value" id="cacheHitRate">0%</div>
+                    <div class="label">Cache Hit Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card p-3 mb-4">
+            <div class="row align-items-end">
+                <div class="col-md-3 mb-2">
+                    <label class="form-label small">Template</label>
+                    <select class="form-select" id="filterTemplate">
+                        <option value="">All Templates</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label small">Since</label>
+                    <input type="date" class="form-control" id="filterSince">
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label small">Limit</label>
+                    <select class="form-select" id="filterLimit">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <button class="btn btn-primary w-100" onclick="loadHistory()">
+                        <i class="bi bi-search me-1"></i> Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Template</th>
+                            <th>Status</th>
+                            <th>Tokens</th>
+                            <th>Cost</th>
+                            <th>Cached</th>
+                            <th>Content Preview</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTable">
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-secondary">
+                                <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                                Loading history...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Generation Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <small class="text-secondary">Template</small>
+                            <p id="modalTemplate" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-secondary">Timestamp</small>
+                            <p id="modalTimestamp" class="mb-0"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <small class="text-secondary">Tokens</small>
+                            <p id="modalTokens" class="mb-0"></p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-secondary">Cost</small>
+                            <p id="modalCost" class="mb-0"></p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-secondary">Generation Time</small>
+                            <p id="modalTime" class="mb-0"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-secondary">Variables</small>
+                        <pre id="modalVariables" class="bg-dark p-3 rounded mt-1" style="max-height: 150px; overflow: auto;"></pre>
+                    </div>
+                    <div>
+                        <small class="text-secondary">Content</small>
+                        <div id="modalContent" class="bg-dark p-3 rounded mt-1" style="white-space: pre-wrap; max-height: 300px; overflow: auto;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="copyModalContent()">
+                        <i class="bi bi-clipboard me-1"></i> Copy Content
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let historyData = [];
+        const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStatistics();
+            loadHistory();
+            loadTemplateOptions();
+        });
+
+        // Load Statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                
+                if (data.success && data.stats) {
+                    const stats = data.stats;
+                    document.getElementById('totalGenerations').textContent = stats.total_generations || 0;
+                    document.getElementById('totalCost').textContent = `$${(stats.total_cost || 0).toFixed(4)}`;
+                    document.getElementById('successRate').textContent = `${(stats.success_rate || 0).toFixed(1)}%`;
+                    document.getElementById('cacheHitRate').textContent = `${(stats.cache_hit_rate || 0).toFixed(1)}%`;
+                }
+            } catch (err) {
+                console.error('Failed to load statistics:', err);
+            }
+        }
+
+        // Load History
+        async function loadHistory() {
+            const template = document.getElementById('filterTemplate').value;
+            const since = document.getElementById('filterSince').value;
+            const limit = document.getElementById('filterLimit').value;
+            
+            let url = `/api/history?limit=${limit}`;
+            if (template) url += `&template=${encodeURIComponent(template)}`;
+            if (since) url += `&since=${encodeURIComponent(since)}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    historyData = data.history || [];
+                    renderHistory();
+                }
+            } catch (err) {
+                console.error('Failed to load history:', err);
+                document.getElementById('historyTable').innerHTML = `
+                    <tr><td colspan="7" class="text-center py-5 text-danger">Failed to load history</td></tr>
+                `;
+            }
+        }
+
+        // Render History Table
+        function renderHistory() {
+            const tbody = document.getElementById('historyTable');
+            
+            if (historyData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-secondary">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            No history yet. Generate some content to see it here.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            historyData.forEach((item, index) => {
+                const timestamp = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+                const tokens = item.tokens_used?.total || 0;
+                const cost = (item.cost || 0).toFixed(6);
+                const content = item.content || item.error || 'No content';
+                const preview = content.substring(0, 50) + (content.length > 50 ? '...' : '');
+                
+                html += `
+                    <tr class="history-item" onclick="showDetail(${index})">
+                        <td><small>${timestamp}</small></td>
+                        <td><code>${item.template_used || 'N/A'}</code></td>
+                        <td>
+                            <span class="badge ${item.success ? 'badge-success' : 'badge-error'}">
+                                ${item.success ? 'Success' : 'Failed'}
+                            </span>
+                        </td>
+                        <td>${tokens}</td>
+                        <td>$${cost}</td>
+                        <td>${item.cached ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-x-circle text-secondary"></i>'}</td>
+                        <td class="content-preview">${preview}</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        // Load Template Options
+        async function loadTemplateOptions() {
+            try {
+                const response = await fetch('/api/templates');
+                const data = await response.json();
+                
+                if (data.success && data.templates) {
+                    const select = document.getElementById('filterTemplate');
+                    data.templates.forEach(t => {
+                        const option = document.createElement('option');
+                        option.value = t.name;
+                        option.textContent = t.name.replace(/_/g, ' ');
+                        select.appendChild(option);
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load templates:', err);
+            }
+        }
+
+        // Show Detail Modal
+        function showDetail(index) {
+            const item = historyData[index];
+            if (!item) return;
+            
+            document.getElementById('modalTemplate').textContent = item.template_used || 'N/A';
+            document.getElementById('modalTimestamp').textContent = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+            document.getElementById('modalTokens').textContent = `${item.tokens_used?.total || 0} (prompt: ${item.tokens_used?.prompt || 0}, completion: ${item.tokens_used?.completion || 0})`;
+            document.getElementById('modalCost').textContent = `$${(item.cost || 0).toFixed(6)}`;
+            document.getElementById('modalTime').textContent = `${(item.generation_time || 0).toFixed(3)}s`;
+            document.getElementById('modalVariables').textContent = JSON.stringify(item.variables || {}, null, 2);
+            document.getElementById('modalContent').textContent = item.content || item.error || 'No content';
+            
+            detailModal.show();
+        }
+
+        // Copy Modal Content
+        function copyModalContent() {
+            const content = document.getElementById('modalContent').textContent;
+            navigator.clipboard.writeText(content);
+            alert('Content copied to clipboard!');
+        }
+
+        // Export History
+        function exportHistory(format) {
+            window.location.href = `/api/history/export?format=${format}`;
+        }
+
+        // Clear History
+        async function clearHistory() {
+            if (!confirm('Are you sure you want to clear all history?')) return;
+            
+            try {
+                const response = await fetch('/api/history/clear', { method: 'DELETE' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`Cleared ${data.deleted_count} entries`);
+                    loadHistory();
+                    loadStatistics();
+                }
+            } catch (err) {
+                alert('Failed to clear history');
+            }
+        }
+    </script>
+</body>
+</html>

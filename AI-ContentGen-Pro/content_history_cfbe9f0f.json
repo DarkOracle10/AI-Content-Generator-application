@@ -1,0 +1,29 @@
+{
+  "session_id": "cfbe9f0f1af346e590c3af51ca1c2e21",
+  "session_start": "2026-01-05T17:39:02.534393+00:00",
+  "export_timestamp": "2026-01-05T17:39:02.535220+00:00",
+  "total_entries": 1,
+  "history": [
+    {
+      "success": true,
+      "content": "Mock generated content",
+      "template_used": "product_description",
+      "variables": {
+        "product_name": "Context Manager Test",
+        "features": "Auto cleanup",
+        "audience": "Developers"
+      },
+      "timestamp": "2026-01-05T17:39:02.534811+00:00",
+      "request_id": "0ac5b6a7e6d241258bfe7dde4d301573",
+      "model": "gpt-3.5-turbo",
+      "tokens_used": {
+        "prompt": 50,
+        "completion": 50,
+        "total": 100
+      },
+      "cost": 0.001,
+      "cached": false,
+      "generation_time": 0.00027600000612437725
+    }
+  ]
+}

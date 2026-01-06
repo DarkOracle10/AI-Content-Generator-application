@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - AI Content Generator Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #eee;
+            --text-secondary: #adb5bd;
+        }
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: var(--bg-card) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-link {
+            color: var(--text-secondary);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+        }
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .sidebar .nav-link.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a5b4fc;
+        }
+        .endpoint-card {
+            margin-bottom: 30px;
+        }
+        .method-badge {
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .method-get { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .method-post { background: rgba(0, 123, 255, 0.2); color: #007bff; }
+        .method-delete { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .endpoint-path {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1.1rem;
+        }
+        pre {
+            background: #0d1117 !important;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        pre code {
+            color: #e6edf3 !important;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            display: block;
+            white-space: pre;
+        }
+        /* Inline code styling */
+        :not(pre) > code {
+            background: #21262d;
+            color: #79c0ff !important;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .param-table {
+            font-size: 0.9rem;
+        }
+        .param-table th {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .param-name {
+            font-family: monospace;
+            color: #a5b4fc;
+        }
+        .param-required {
+            color: #dc3545;
+            font-size: 0.8rem;
+        }
+        .try-btn {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
+                AI Content Generator Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="bi bi-clock-history me-1"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/docs"><i class="bi bi-book me-1"></i> API Docs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="sidebar">
+                    <h6 class="text-secondary mb-3">API REFERENCE</h6>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="#overview">Overview</a>
+                        <a class="nav-link" href="#authentication">Authentication</a>
+                        <a class="nav-link" href="#health">Health Check</a>
+                        <a class="nav-link" href="#templates">Templates</a>
+                        <a class="nav-link" href="#generate">Generate Content</a>
+                        <a class="nav-link" href="#variations">Generate Variations</a>
+                        <a class="nav-link" href="#batch">Batch Generation</a>
+                        <a class="nav-link" href="#history">History</a>
+                        <a class="nav-link" href="#statistics">Statistics</a>
+                        <a class="nav-link" href="#validate">Validate</a>
+                        <a class="nav-link" href="#cost-estimate">Cost Estimate</a>
+                        <a class="nav-link" href="#errors">Error Codes</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-lg-9">
+                <!-- Overview -->
+                <section id="overview" class="mb-5">
+                    <h2 class="mb-4">API Overview</h2>
+                    <div class="card p-4">
+                        <p>The AI Content Generator API provides programmatic access to content generation capabilities. All API endpoints return JSON responses.</p>
+                        
+                        <h6 class="mt-4">Base URL</h6>
+                        <pre><code>http://localhost:5000/api</code></pre>
+                        
+                        <h6 class="mt-4">Response Format</h6>
+                        <p>All responses follow this structure:</p>
+                        <pre><code>{
+  "success": true,
+  "data": { ... }
+}
+
+// Or on error:
+{
+  "success": false,
+  "error": "Error message",
+  "code": "ERROR_CODE"
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Authentication -->
+                <section id="authentication" class="mb-5">
+                    <h2 class="mb-4">Authentication</h2>
+                    <div class="card p-4">
+                        <p>The API uses session-based authentication by default. For programmatic access, you can optionally configure API key authentication.</p>
+                        
+                        <h6 class="mt-3">Optional API Key</h6>
+                        <p>If <code>API_KEY_REQUIRED</code> environment variable is set, include the key in headers:</p>
+                        <pre><code>X-API-Key: your-api-key</code></pre>
+                        
+                        <h6 class="mt-3">Rate Limiting</h6>
+                        <p>Default limit: <strong>60 requests per minute</strong> per session.</p>
+                    </div>
+                </section>
+
+                <!-- Health -->
+                <section id="health" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-get me-3">GET</span>
+                            <span class="endpoint-path">/api/health</span>
+                        </div>
+                        <p>Check API health status.</p>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "status": "healthy",
+  "timestamp": "2026-01-05T21:35:00Z",
+  "version": "1.0.0",
+  "active_sessions": 5
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Templates -->
+                <section id="templates" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-get me-3">GET</span>
+                            <span class="endpoint-path">/api/templates</span>
+                        </div>
+                        <p>List all available content templates.</p>
+                        
+                        <h6>Query Parameters</h6>
+                        <table class="table table-sm param-table">
+                            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-name">category</td>
+                                    <td>string</td>
+                                    <td>Filter by category (marketing, technical, etc.)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "templates": [
+    {
+      "name": "product_description",
+      "category": "marketing",
+      "description": "Generate product descriptions",
+      "required_variables": ["product_name", "features", "audience"],
+      "version": "1.0"
+    }
+  ],
+  "count": 10
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Generate -->
+                <section id="generate" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-post me-3">POST</span>
+                            <span class="endpoint-path">/api/generate</span>
+                        </div>
+                        <p>Generate content using a template.</p>
+                        
+                        <h6>Request Body</h6>
+                        <table class="table table-sm param-table">
+                            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-name">template <span class="param-required">*</span></td>
+                                    <td>string</td>
+                                    <td>Template name</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-name">variables <span class="param-required">*</span></td>
+                                    <td>object</td>
+                                    <td>Template variables</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-name">use_cache</td>
+                                    <td>boolean</td>
+                                    <td>Use cached results (default: true)</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-name">options</td>
+                                    <td>object</td>
+                                    <td>Generation options (temperature, max_tokens)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h6>Example Request</h6>
+                        <pre><code>POST /api/generate
+Content-Type: application/json
+
+{
+  "template": "product_description",
+  "variables": {
+    "product_name": "Smart Watch Pro",
+    "features": "GPS, Heart Rate Monitor, 7-day battery",
+    "audience": "Fitness enthusiasts"
+  },
+  "use_cache": true,
+  "options": {
+    "temperature": 0.7
+  }
+}</code></pre>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "result": {
+    "content": "Introducing the Smart Watch Pro...",
+    "template_used": "product_description",
+    "tokens_used": {
+      "prompt": 45,
+      "completion": 123,
+      "total": 168
+    },
+    "cost": 0.0034,
+    "timestamp": "2026-01-05T21:35:00Z",
+    "cached": false,
+    "generation_time": 2.3
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Variations -->
+                <section id="variations" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-post me-3">POST</span>
+                            <span class="endpoint-path">/api/generate/variations</span>
+                        </div>
+                        <p>Generate multiple variations of content.</p>
+                        
+                        <h6>Request Body</h6>
+                        <pre><code>{
+  "template": "social_media_post",
+  "variables": {
+    "topic": "AI Innovation",
+    "platform": "LinkedIn"
+  },
+  "count": 3,
+  "temperature_range": [0.5, 1.0]
+}</code></pre>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "variations": [
+    {"content": "...", "variation_number": 1, "variation_temperature": 0.5, ...},
+    {"content": "...", "variation_number": 2, "variation_temperature": 0.75, ...},
+    {"content": "...", "variation_number": 3, "variation_temperature": 1.0, ...}
+  ],
+  "total_cost": 0.012,
+  "success_count": 3,
+  "failure_count": 0
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Batch -->
+                <section id="batch" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-post me-3">POST</span>
+                            <span class="endpoint-path">/api/generate/batch</span>
+                        </div>
+                        <p>Process multiple generation requests in one call.</p>
+                        
+                        <h6>Request Body</h6>
+                        <pre><code>{
+  "requests": [
+    {"template": "product_description", "variables": {...}},
+    {"template": "meta_description", "variables": {...}}
+  ],
+  "parallel": false
+}</code></pre>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "results": [...],
+  "total_cost": 0.025,
+  "success_count": 2,
+  "failure_count": 0
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- History -->
+                <section id="history" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-get me-3">GET</span>
+                            <span class="endpoint-path">/api/history</span>
+                        </div>
+                        <p>Get generation history for the current session.</p>
+                        
+                        <h6>Query Parameters</h6>
+                        <table class="table table-sm param-table">
+                            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr><td class="param-name">limit</td><td>int</td><td>Number of items (default: 20, max: 100)</td></tr>
+                                <tr><td class="param-name">template</td><td>string</td><td>Filter by template name</td></tr>
+                                <tr><td class="param-name">since</td><td>ISO date</td><td>Items after this date</td></tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="mt-4 pt-3 border-top border-secondary">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method-badge method-get me-3">GET</span>
+                                <span class="endpoint-path">/api/history/export</span>
+                            </div>
+                            <p>Export history as downloadable file.</p>
+                            <p><strong>Query:</strong> <code>?format=json</code> or <code>?format=csv</code></p>
+                        </div>
+                        
+                        <div class="mt-4 pt-3 border-top border-secondary">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method-badge method-delete me-3">DELETE</span>
+                                <span class="endpoint-path">/api/history/clear</span>
+                            </div>
+                            <p>Clear all generation history.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Statistics -->
+                <section id="statistics" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-get me-3">GET</span>
+                            <span class="endpoint-path">/api/statistics</span>
+                        </div>
+                        <p>Get usage statistics for the current session.</p>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "stats": {
+    "total_generations": 123,
+    "total_cost": 5.67,
+    "total_tokens": 45678,
+    "templates_used": {"product_description": 50, ...},
+    "success_rate": 98.5,
+    "cache_hit_rate": 35.2,
+    "average_generation_time": 2.4,
+    "session_id": "abc123...",
+    "session_start": "2026-01-05T20:00:00Z"
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Validate -->
+                <section id="validate" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-post me-3">POST</span>
+                            <span class="endpoint-path">/api/validate</span>
+                        </div>
+                        <p>Validate template variables without generating content.</p>
+                        
+                        <h6>Request</h6>
+                        <pre><code>{
+  "template": "product_description",
+  "variables": {"product_name": "Test"}
+}</code></pre>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "valid": false,
+  "missing_variables": ["features", "audience"],
+  "estimated_cost": null
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Cost Estimate -->
+                <section id="cost-estimate" class="mb-5 endpoint-card">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="method-badge method-post me-3">POST</span>
+                            <span class="endpoint-path">/api/cost-estimate</span>
+                        </div>
+                        <p>Estimate cost before generating content.</p>
+                        
+                        <h6>Request</h6>
+                        <pre><code>{
+  "template": "product_description",
+  "variables": {
+    "product_name": "Widget",
+    "features": "Fast, reliable",
+    "audience": "Developers"
+  }
+}</code></pre>
+                        
+                        <h6>Response</h6>
+                        <pre><code>{
+  "success": true,
+  "estimate": {
+    "input_tokens": 45,
+    "estimated_output_tokens": 150,
+    "total_tokens": 195,
+    "estimated_cost": 0.0039,
+    "model": "gpt-4o-mini"
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Error Codes -->
+                <section id="errors" class="mb-5">
+                    <h2 class="mb-4">Error Codes</h2>
+                    <div class="card p-4">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>Code</th><th>HTTP Status</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>MISSING_FIELD</code></td><td>400</td><td>Required field is missing</td></tr>
+                                <tr><td><code>INVALID_JSON</code></td><td>400</td><td>Request body is not valid JSON</td></tr>
+                                <tr><td><code>MISSING_VARIABLES</code></td><td>400</td><td>Required template variables missing</td></tr>
+                                <tr><td><code>TEMPLATE_NOT_FOUND</code></td><td>404</td><td>Requested template does not exist</td></tr>
+                                <tr><td><code>RATE_LIMIT_EXCEEDED</code></td><td>429</td><td>Too many requests</td></tr>
+                                <tr><td><code>GENERATION_FAILED</code></td><td>500</td><td>Content generation failed</td></tr>
+                                <tr><td><code>INTERNAL_ERROR</code></td><td>500</td><td>Internal server error</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for sidebar links
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                // Update active state
+                document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight current section on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.sidebar a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

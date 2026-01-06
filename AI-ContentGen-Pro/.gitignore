@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+
+# Environment variables
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# Pytest cache
+.pytest_cache/
+
+# Flask instance folder
+instance/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+temp*.txt
+temp*.html
+*_OLD.md
+
+# Test and debug scripts
+test_*.py
+check_*.py
+quick_*.py
+
+# Portfolio generation
+portfolio_assets/*.png
+AI-ContentGen-Portfolio.pdf
+test_debug.pdf
+
+# Screenshots
+Screenshot*.png
+*.png.tmp
+
+# Logs and history
+*.log
+history.json
+generation_history.json
+
+# Backup files
+*.bak
+*.backup

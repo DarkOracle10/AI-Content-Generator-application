@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Content Generator Pro</title>
+    <meta name="description" content="Generate professional content with AI - Create marketing copy, social media posts, and more in seconds">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#6366f1',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        },
+                        secondary: {
+                            DEFAULT: '#8b5cf6',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        
+        /* Loading spinner animation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Fade in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Pulse animation for loading states */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-robot text-3xl text-primary"></i>
+                    <span class="text-xl font-bold gradient-text hidden sm:inline">AI Content Generator Pro</span>
+                    <span class="text-xl font-bold gradient-text sm:hidden">AI Generator</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-4 sm:space-x-6">
+                    <a href="/" class="text-primary font-semibold hidden sm:inline">
+                        <i class="fas fa-home mr-1"></i>Generate
+                    </a>
+                    <a href="/history" class="hover:text-primary hidden sm:inline">
+                        <i class="fas fa-clock-rotate-left mr-1"></i>History
+                    </a>
+                    <a href="/docs" class="hover:text-primary hidden sm:inline">
+                        <i class="fas fa-book mr-1"></i>Docs
+                    </a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon dark:hidden text-xl"></i>
+                        <i class="fas fa-sun hidden dark:inline text-xl text-yellow-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-8 sm:mb-12 fade-in">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+                Generate Professional Content with <span class="gradient-text">AI</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Create engaging marketing copy, social media posts, product descriptions, and more in seconds
+            </p>
+        </div>
+        
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            
+            <!-- Left Panel: Generator Interface -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Template Selection Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 fade-in">
+                    
+                    <!-- Template Selector -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold mb-3">
+                            <i class="fas fa-layer-group mr-2 text-primary"></i>Select Content Template
+                        </label>
+                        <select id="templateSelect" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer" aria-label="Select template">
+                            <option value="">Choose a content type...</option>
+                            {% for template in templates %}
+                            <option value="{{ template.name }}" 
+                                    data-description="{{ template.description | e }}"
+                                    data-category="{{ template.category | e }}"
+                                    data-vars='{{ template.required_variables | tojson }}'>
+                                {{ template.name | replace('_', ' ') | title }} - {{ template.description[:50] if template.description else template.category }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Template Description -->
+                    <div id="templateDescription" class="mb-6 p-4 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg border border-primary-200 dark:border-primary-700 hidden">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-primary mt-1 mr-3"></i>
+                            <div>
+                                <p id="templateDescriptionText" class="text-sm text-gray-700 dark:text-gray-300"></p>
+                                <span id="templateCategory" class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Generator Form -->
+                    <form id="generatorForm" class="space-y-4">
+                        
+                        <!-- Dynamic Variables Container -->
+                        <div id="variablesContainer" class="space-y-4">
+                            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                                <i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i>
+                                <p>Select a template above to configure variables</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Options -->
+                        <details class="group" id="advancedOptions">
+                            <summary class="cursor-pointer font-semibold text-gray-700 dark:text-gray-300 hover:text-primary transition-colors flex items-center">
+                                <i class="fas fa-cog mr-2"></i>
+                                <span>Advanced Options</span>
+                                <i class="fas fa-chevron-down ml-auto group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="mt-4 space-y-4 pl-2 border-l-2 border-primary-200 dark:border-primary-700 ml-2">
+                                <div>
+                                    <label class="flex items-center justify-between text-sm mb-2">
+                                        <span>Temperature (Creativity)</span>
+                                        <span id="temperatureValue" class="font-mono text-primary">0.7</span>
+                                    </label>
+                                    <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Precise</span>
+                                        <span>Creative</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm mb-2">Max Tokens</label>
+                                    <input type="number" id="maxTokens" value="500" min="50" max="4000" step="50" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary outline-none">
+                                </div>
+                                <div>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="useCache" checked class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer">
+                                        <span class="ml-2 text-sm">Use cache (faster & cheaper)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </details>
+                        
+                        <!-- Cost Estimate -->
+                        <div id="costEstimate" class="hidden p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-calculator mr-2 text-green-600"></i>Estimated Cost:
+                                </span>
+                                <span id="estimatedCost" class="font-mono font-semibold text-green-600 dark:text-green-400">$0.000000</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button type="submit" id="generateBtn" disabled class="flex-1 bg-gradient-to-r from-primary to-primary-600 hover:from-primary-600 hover:to-primary-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center">
+                                <i class="fas fa-wand-magic-sparkles mr-2"></i>
+                                <span>Generate Content</span>
+                            </button>
+                            <button type="button" id="variationsBtn" disabled class="bg-gradient-to-r from-secondary to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center">
+                                <i class="fas fa-clone mr-2"></i>
+                                <span class="hidden sm:inline">3 Variations</span>
+                                <span class="sm:hidden">Variations</span>
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+                
+                <!-- Output Section -->
+                <div id="outputSection" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 hidden fade-in">
+                    
+                    <!-- Output Header -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+                        <h2 class="text-xl sm:text-2xl font-bold flex items-center">
+                            <i class="fas fa-file-alt mr-2 text-primary"></i>
+                            <span>Generated Content</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button id="copyBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-copy mr-2"></i>
+                                <span class="hidden sm:inline">Copy</span>
+                            </button>
+                            <button id="downloadBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-download mr-2"></i>
+                                <span class="hidden sm:inline">Download</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Generated Content Display -->
+                    <div id="outputContent" class="mb-6 p-4 sm:p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 whitespace-pre-wrap text-sm sm:text-base leading-relaxed min-h-[200px]">
+                        <!-- Content will appear here -->
+                    </div>
+                    
+                    <!-- Metadata -->
+                    <div id="outputMetadata" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                        <!-- Metadata will appear here -->
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <!-- Right Sidebar: Stats & Info -->
+            <div class="space-y-6">
+                
+                <!-- Session Statistics Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 fade-in">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-chart-line mr-2 text-primary"></i>
+                        <span>Session Stats</span>
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400 text-sm">Generations</span>
+                            <span id="statGenerations" class="text-2xl font-bold text-primary">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400 text-sm">Total Cost</span>
+                            <span id="statCost" class="text-xl font-bold text-green-600 dark:text-green-400">$0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400 text-sm">Cache Hit Rate</span>
+                            <span id="statCacheRate" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400 text-sm">Avg Time</span>
+                            <span id="statAvgTime" class="text-xl font-bold text-purple-600 dark:text-purple-400">0s</span>
+                        </div>
+                    </div>
+                    <button id="refreshStatsBtn" class="mt-4 w-full py-2 text-sm text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
+                        <i class="fas fa-refresh mr-1"></i>Refresh
+                    </button>
+                </div>
+                
+                <!-- Popular Templates Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 fade-in">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-fire mr-2 text-orange-500"></i>
+                        <span>Quick Templates</span>
+                    </h3>
+                    <div class="space-y-2" id="popularTemplates">
+                        <button class="quick-template w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm" data-template="blog_post_outline">
+                            <i class="fas fa-newspaper mr-2 text-blue-500"></i>Blog Outline
+                        </button>
+                        <button class="quick-template w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm" data-template="social_media_post">
+                            <i class="fas fa-share-nodes mr-2 text-pink-500"></i>Social Post
+                        </button>
+                        <button class="quick-template w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm" data-template="product_description">
+                            <i class="fas fa-shopping-cart mr-2 text-green-500"></i>Product Copy
+                        </button>
+                        <button class="quick-template w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm" data-template="email_newsletter">
+                            <i class="fas fa-envelope mr-2 text-purple-500"></i>Newsletter
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tips Card -->
+                <div class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-xl shadow-lg p-6 border border-primary-200 dark:border-primary-800 fade-in">
+                    <h3 class="font-semibold text-lg mb-3 flex items-center text-primary-700 dark:text-primary-300">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        <span>Pro Tip</span>
+                    </h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        Lower temperature (0.3-0.5) for factual content. Higher temperature (0.7-1.0) for creative writing.
+                    </p>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </main>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl text-center max-w-sm mx-4">
+            <div class="spinner inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full mb-4"></div>
+            <p class="text-xl font-semibold mb-2">Generating content...</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">This may take a few seconds</p>
+        </div>
+    </div>
+    
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 space-y-2 z-50 max-w-sm">
+        <!-- Toasts will be inserted here -->
+    </div>
+
+    
+    <!-- JavaScript -->
+    <script>
+        // ===================================================================
+        // STATE MANAGEMENT
+        // ===================================================================
+        const state = {
+            selectedTemplate: null,
+            requiredVariables: [],
+            templates: {},
+            stats: {
+                generations: 0,
+                cost: 0,
+                cacheRate: 0,
+                avgTime: 0
+            }
+        };
+        
+        // ===================================================================
+        // DOM ELEMENTS
+        // ===================================================================
+        const elements = {
+            templateSelect: document.getElementById('templateSelect'),
+            templateDescription: document.getElementById('templateDescription'),
+            templateDescriptionText: document.getElementById('templateDescriptionText'),
+            templateCategory: document.getElementById('templateCategory'),
+            variablesContainer: document.getElementById('variablesContainer'),
+            generatorForm: document.getElementById('generatorForm'),
+            generateBtn: document.getElementById('generateBtn'),
+            variationsBtn: document.getElementById('variationsBtn'),
+            outputSection: document.getElementById('outputSection'),
+            outputContent: document.getElementById('outputContent'),
+            outputMetadata: document.getElementById('outputMetadata'),
+            loadingOverlay: document.getElementById('loadingOverlay'),
+            copyBtn: document.getElementById('copyBtn'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            costEstimate: document.getElementById('costEstimate'),
+            estimatedCost: document.getElementById('estimatedCost'),
+            temperature: document.getElementById('temperature'),
+            temperatureValue: document.getElementById('temperatureValue'),
+            darkModeToggle: document.getElementById('darkModeToggle'),
+            refreshStatsBtn: document.getElementById('refreshStatsBtn'),
+            statGenerations: document.getElementById('statGenerations'),
+            statCost: document.getElementById('statCost'),
+            statCacheRate: document.getElementById('statCacheRate'),
+            statAvgTime: document.getElementById('statAvgTime')
+        };
+        
+        // ===================================================================
+        // DARK MODE
+        // ===================================================================
+        function initDarkMode() {
+            const darkMode = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (darkMode === 'enabled' || (darkMode === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        elements.darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+        
+        // ===================================================================
+        // TEMPLATE SELECTION
+        // ===================================================================
+        elements.templateSelect.addEventListener('change', (e) => {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            
+            if (!selectedOption.value) {
+                resetTemplateSelection();
+                return;
+            }
+            
+            state.selectedTemplate = selectedOption.value;
+            state.requiredVariables = JSON.parse(selectedOption.dataset.vars || '[]');
+            
+            // Show template description
+            elements.templateDescriptionText.textContent = selectedOption.dataset.description;
+            elements.templateCategory.textContent = selectedOption.dataset.category;
+            elements.templateDescription.classList.remove('hidden');
+            
+            // Render variable inputs
+            renderVariableInputs();
+            
+            // Enable buttons
+            elements.generateBtn.disabled = false;
+            elements.variationsBtn.disabled = false;
+            
+            // Estimate cost
+            estimateCost();
+        });
+        
+        // Quick template buttons
+        document.querySelectorAll('.quick-template').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const template = btn.dataset.template;
+                elements.templateSelect.value = template;
+                elements.templateSelect.dispatchEvent(new Event('change'));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        function resetTemplateSelection() {
+            state.selectedTemplate = null;
+            state.requiredVariables = [];
+            elements.templateDescription.classList.add('hidden');
+            elements.variablesContainer.innerHTML = `
+                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i>
+                    <p>Select a template above to configure variables</p>
+                </div>
+            `;
+            elements.generateBtn.disabled = true;
+            elements.variationsBtn.disabled = true;
+            elements.costEstimate.classList.add('hidden');
+        }
+        
+        // ===================================================================
+        // VARIABLE INPUTS
+        // ===================================================================
+        function renderVariableInputs() {
+            if (state.requiredVariables.length === 0) {
+                elements.variablesContainer.innerHTML = `
+                    <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                        <p class="text-sm text-center text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                            No variables required for this template
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            state.requiredVariables.forEach(varName => {
+                const label = varName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                html += `
+                    <div class="variable-input">
+                        <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                            ${label} <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            name="${varName}" 
+                            required 
+                            placeholder="Enter ${label.toLowerCase()}"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        >
+                    </div>
+                `;
+            });
+            elements.variablesContainer.innerHTML = html;
+            
+            // Add input listeners for cost estimation
+            elements.variablesContainer.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', debounce(estimateCost, 500));
+            });
+        }
+        
+        function getFormVariables() {
+            const variables = {};
+            const inputs = elements.variablesContainer.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.value.trim()) {
+                    variables[input.name] = input.value.trim();
+                }
+            });
+            return variables;
+        }
+        
+        // ===================================================================
+        // COST ESTIMATION
+        // ===================================================================
+        async function estimateCost() {
+            if (!state.selectedTemplate) return;
+            
+            const variables = getFormVariables();
+            if (Object.keys(variables).length === 0) {
+                elements.costEstimate.classList.add('hidden');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/cost-estimate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        template: state.selectedTemplate, 
+                        variables 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.estimate) {
+                    elements.estimatedCost.textContent = `$${data.estimate.estimated_cost.toFixed(6)}`;
+                    elements.costEstimate.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('Cost estimate error:', err);
+            }
+        }
+        
+        // ===================================================================
+        // CONTENT GENERATION
+        // ===================================================================
+        elements.generatorForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!state.selectedTemplate) {
+                showToast('Please select a template first', 'warning');
+                return;
+            }
+            
+            const variables = getFormVariables();
+            const useCache = document.getElementById('useCache').checked;
+            const temperature = parseFloat(elements.temperature.value);
+            const maxTokens = parseInt(document.getElementById('maxTokens').value);
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        template: state.selectedTemplate,
+                        variables,
+                        use_cache: useCache,
+                        temperature,
+                        max_tokens: maxTokens
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.result) {
+                    displayResult(data.result);
+                    showToast('Content generated successfully!', 'success');
+                    await refreshStats();
+                } else {
+                    showToast(data.error || 'Generation failed', 'error');
+                    elements.outputContent.innerHTML = `
+                        <div class="text-center py-8 text-red-500">
+                            <i class="fas fa-exclamation-circle text-4xl mb-3"></i>
+                            <p class="font-semibold">${data.error || 'Generation failed'}</p>
+                        </div>
+                    `;
+                    elements.outputSection.classList.remove('hidden');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+                console.error(err);
+            } finally {
+                showLoading(false);
+            }
+        });
+        
+        // ===================================================================
+        // VARIATIONS GENERATION
+        // ===================================================================
+        elements.variationsBtn.addEventListener('click', async () => {
+            if (!state.selectedTemplate) return;
+            
+            const variables = getFormVariables();
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/generate/variations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        template: state.selectedTemplate,
+                        variables,
+                        count: 3,
+                        temperature_range: [0.5, 1.0]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.variations) {
+                    displayVariations(data.variations);
+                    showToast(`Generated ${data.variations.length} variations!`, 'success');
+                    await refreshStats();
+                } else {
+                    showToast(data.error || 'Failed to generate variations', 'error');
+                }
+            } catch (err) {
+                showToast('Network error', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+        
+        // ===================================================================
+        // DISPLAY FUNCTIONS
+        // ===================================================================
+        function displayResult(result) {
+            elements.outputContent.textContent = result.content || 'No content generated.';
+            
+            // Display metadata
+            const metadata = [
+                { 
+                    icon: 'fa-hashtag', 
+                    label: 'Tokens', 
+                    value: result.tokens_used?.total || 0,
+                    color: 'text-blue-600 dark:text-blue-400'
+                },
+                { 
+                    icon: 'fa-dollar-sign', 
+                    label: 'Cost', 
+                    value: `$${(result.cost || 0).toFixed(6)}`,
+                    color: 'text-green-600 dark:text-green-400'
+                },
+                { 
+                    icon: 'fa-clock', 
+                    label: 'Time', 
+                    value: `${(result.generation_time || 0).toFixed(2)}s`,
+                    color: 'text-purple-600 dark:text-purple-400'
+                },
+                { 
+                    icon: result.cached ? 'fa-bolt' : 'fa-globe', 
+                    label: result.cached ? 'Cached' : 'Fresh',
+                    value: result.cached ? 'Yes' : 'No',
+                    color: result.cached ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600 dark:text-gray-400'
+                }
+            ];
+            
+            elements.outputMetadata.innerHTML = metadata.map(m => `
+                <div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">
+                    <i class="fas ${m.icon} ${m.color} mb-1"></i>
+                    <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">${m.label}</div>
+                    <div class="font-bold ${m.color}">${m.value}</div>
+                </div>
+            `).join('');
+            
+            elements.outputSection.classList.remove('hidden');
+            elements.outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function displayVariations(variations) {
+            let html = '<div class="space-y-6">';
+            variations.forEach((v, i) => {
+                html += `
+                    <div class="pb-6 ${i < variations.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''}">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-lg text-primary">Variation ${i + 1}</h3>
+                            <span class="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-semibold">
+                                temp: ${(v.variation_temperature || 0).toFixed(2)}
+                            </span>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">${v.content || 'No content'}</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            elements.outputContent.innerHTML = html;
+            elements.outputMetadata.innerHTML = '';
+            elements.outputSection.classList.remove('hidden');
+            elements.outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // ===================================================================
+        // STATISTICS
+        // ===================================================================
+        async function refreshStats() {
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                
+                if (data.success && data.stats) {
+                    const stats = data.stats;
+                    state.stats = {
+                        generations: stats.total_generations || 0,
+                        cost: stats.total_cost || 0,
+                        cacheRate: stats.cache_hit_rate || 0,
+                        avgTime: stats.average_generation_time || 0
+                    };
+                    
+                    elements.statGenerations.textContent = state.stats.generations;
+                    elements.statCost.textContent = `$${state.stats.cost.toFixed(4)}`;
+                    elements.statCacheRate.textContent = `${(state.stats.cacheRate * 100).toFixed(0)}%`;
+                    elements.statAvgTime.textContent = `${state.stats.avgTime.toFixed(1)}s`;
+                }
+            } catch (err) {
+                console.error('Stats refresh error:', err);
+            }
+        }
+        
+        elements.refreshStatsBtn.addEventListener('click', refreshStats);
+        
+        // ===================================================================
+        // UTILITY FUNCTIONS
+        // ===================================================================
+        function showLoading(show) {
+            elements.loadingOverlay.classList.toggle('hidden', !show);
+        }
+        
+        function showToast(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            const toastId = 'toast-' + Date.now();
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 transform transition-all duration-300 fade-in`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} text-xl"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.remove()" class="hover:bg-white/20 rounded p-1 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), wait);
+            };
+        }
+        
+        // ===================================================================
+        // COPY & DOWNLOAD
+        // ===================================================================
+        elements.copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(elements.outputContent.textContent);
+                showToast('Copied to clipboard!', 'success');
+            } catch (err) {
+                showToast('Failed to copy', 'error');
+            }
+        });
+        
+        elements.downloadBtn.addEventListener('click', () => {
+            const content = elements.outputContent.textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai-content-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!', 'success');
+        });
+        
+        // ===================================================================
+        // TEMPERATURE SLIDER
+        // ===================================================================
+        elements.temperature.addEventListener('input', (e) => {
+            elements.temperatureValue.textContent = e.target.value;
+        });
+        
+        // ===================================================================
+        // INITIALIZATION
+        // ===================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            refreshStats();
+        });
+    </script>
+</body>
+</html>
