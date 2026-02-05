@@ -45,11 +45,21 @@ To make the README complete, please add the following screenshots:
 
 5. **File format**: PNG with transparency if possible
 
-## Placeholder Images
+## 🖼️ Temporary Placeholders
+Until real screenshots are added, use these:
+- [Main Dashboard Preview](https://via.placeholder.com/1200x800/6366f1/ffffff?text=AI-ContentGen-Pro+Dashboard)
+- [Dark Mode Preview](https://via.placeholder.com/1200x800/1a1b26/ffffff?text=Dark+Mode)
 
-Until real screenshots are added, you can use:
-- https://via.placeholder.com/1200x800/6366f1/ffffff?text=AI-ContentGen-Pro
-- Or create simple mockups using tools like Figma or Canva
+## Quick Screenshot Checklist
+- [ ] Start app: `python gui/app.py`
+- [ ] Open: http://127.0.0.1:5000
+- [ ] Take 4 screenshots using Win+Shift+S or Snipping Tool
+- [ ] Save to this directory
+- [ ] Update main README image paths
+
+## Placeholder Images (Alternative)
+
+Or create simple mockups using tools like Figma or Canva
 
 ## Tips for Great Screenshots
 
